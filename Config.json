@@ -1,1 +1,1 @@
-{"k":4,"x":[0.0,30.0,80.0,80.0],"y":[0.0,0.0,0.0,80.0],"semiLambda":16.3,"stopThreshold":1.0E-30,"maxPerimeter":15.0,"maxS":15,"sigmaP":0.5,"sigmaV":3.5,"port":"","epc":""}
+{"k":4,"x":[0.0,60.0,160.0,160.0],"y":[0.0,0.0,0.0,160.0],"semiLambda":16.3,"stopThreshold":1.0E-22,"maxPerimeter":15.0,"maxS":15,"sigmaP":0.5,"sigmaV":1.0,"sigmaA":4.0}

@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
 
     private MainFrame() {
         setTitle("GLAC");
-        setBounds(100, 100, 800, 800);
+        setBounds(100, 100, 930, 800);
         tabbedPane=new JTabbedPane();
         tabbedPane.setFont(new Font("Calibri", Font.BOLD, 18));
         tabbedPane.addTab("Online Tracking",null, OnlinePanel.getInstance());

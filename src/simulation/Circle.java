@@ -18,11 +18,13 @@ public class Circle extends Shape {
 
     double r;
     double w;
+    double a;
     long time;
 
-    public Circle(double r, double w, long time) {
+    public Circle(double r, double w, double a, long time) {
         this.r = r;
         this.w = w;
+        this.a = a;
         this.time = time;
     }
 

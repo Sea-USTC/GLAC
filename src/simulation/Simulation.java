@@ -7,9 +7,10 @@ package simulation;
 
 
 import Jama.Matrix;
-import glac.Config;
 import glac.TagData;
 import glac.HMM;
+import glac.HMM4dv;
+import glac.Config;
 import utils.MyRandom;
 import java.util.ArrayList;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,35 +26,65 @@ public class Simulation {
     static double sigma = 0.1;//仿真生成的相位的标准差
     static MyRandom random = new MyRandom();//随机数生成器
 
-    public static ArrayList<Double>[][] track(Shape shape) {
-        ArrayList<Double> lists[][] = new ArrayList[2][3];
+    public static ArrayList<Double>[][] track(Shape shape, boolean optimizing) {
+        ArrayList<Double> lists[][] = new ArrayList[2][4];
         for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 4; j++) {
                 lists[i][j] = new ArrayList<>();
             }
         }
-        HMM hmm = new HMM();
-        for (int t = 0; t < 10; t++) {
-            hmm.clear();
-            int i = 0;
-            ArrayList<StateStamp> g = shape.generate();
-            for (StateStamp s : g) {
-                double ph = genPhase(s.getStateVector().get(0, 0), s.getStateVector().get(1, 0), i);
-                TagData td = new TagData(i, s.getTime(), ph);
-                hmm.add(td);
-                i = (i + 1) % Config.getK();
+        if(optimizing){
+            HMM hmm = new HMM();
+            for (int t = 0; t < 5; t++) {
+                hmm.clear();
+                int i = 0;
+                ArrayList<StateStamp> g = shape.generate();
+                for (StateStamp s : g) {
+                    double ph = genPhase(s.getStateVector().get(0, 0), s.getStateVector().get(1, 0), i);
+                    TagData td = new TagData(i, s.getTime(), ph);
+                    hmm.add(td);
+                    i = (i + 1) % Config.getK();
+                }
+                ArrayList<Pair<Double, Double>> tr = hmm.getTrajectory();
+                ArrayList<Pair<Double, Double>> v = hmm.getVelocity();
+                if (tr == null) {
+                    t--;
+                    continue;
+                }
+                for (int k = 0; k < g.size(); k++) {
+                    Matrix e = getError(tr.get(k), v.get(k), g.get(k).getStateVector());
+                    for (i = 0; i < 2; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            lists[i][j].add(e.get(i, j));
+                        }
+                    }
+                }
             }
-            ArrayList<Pair<Double, Double>> tr = hmm.getTrajectory();
-            ArrayList<Pair<Double, Double>> v = hmm.getVelocity();
-            if (tr == null) {
-                t--;
-                continue;
-            }
-            for (int k = 0; k < g.size(); k++) {
-                Matrix e = getError(tr.get(k), v.get(k), g.get(k).getStateVector());
-                for (i = 0; i < 2; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        lists[i][j].add(e.get(i, j));
+        }
+        else{
+            HMM4dv hmm = new HMM4dv();
+            for (int t = 0; t < 5; t++) {
+                hmm.clear();
+                int i = 0;
+                ArrayList<StateStamp> g = shape.generate();
+                for (StateStamp s : g) {
+                    double ph = genPhase(s.getStateVector().get(0, 0), s.getStateVector().get(1, 0), i);
+                    TagData td = new TagData(i, s.getTime(), ph);
+                    hmm.add(td);
+                    i = (i + 1) % Config.getK();
+                }
+                ArrayList<Pair<Double, Double>> tr = hmm.getTrajectory();
+                ArrayList<Pair<Double, Double>> v = hmm.getVelocity();
+                if (tr == null) {
+                    t--;
+                    continue;
+                }
+                for (int k = 0; k < g.size(); k++) {
+                    Matrix e = getError(tr.get(k), v.get(k), g.get(k).getStateVector());
+                    for (i = 0; i < 2; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            lists[i][j].add(e.get(i, j));
+                        }
                     }
                 }
             }
@@ -62,13 +93,15 @@ public class Simulation {
     }
 
     private static Matrix getError(Pair<Double, Double> p, Pair<Double, Double> v, Matrix g) {
-        double mat[][] = new double[2][3];
+        double mat[][] = new double[2][4];
         mat[0][0] = Math.abs(g.get(0, 0) - p.getLeft());
         mat[0][1] = Math.abs(g.get(1, 0) - p.getRight());
         mat[0][2] = MyUtils.dist(g.get(0, 0), g.get(1, 0), p.getLeft(), p.getRight());
+        mat[0][3] = mat[0][2]/Config.getSigmaP();
         mat[1][0] = Math.abs(g.get(2, 0) - v.getLeft());
         mat[1][1] = Math.abs(g.get(3, 0) - v.getRight());
         mat[1][2] = MyUtils.dist(g.get(2, 0), g.get(3, 0), v.getLeft(), v.getRight());
+        mat[1][3] = mat[1][2]/Config.getSigmaV();
         return new Matrix(mat);
     }
 

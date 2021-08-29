@@ -17,12 +17,16 @@ public class Line extends Shape {
         
         double deg;
         double v;
+        double a;
         long time;
+        double fps;
         
-        public Line(double deg, double v, long time) {
+        public Line(double deg, double v, double a, long time, double fps) {
             this.deg = deg;
             this.v = v;
+            this.a = a;
             this.time = time;
+            this.fps = fps;
         }
 
         /**
@@ -36,12 +40,15 @@ public class Line extends Shape {
             ArrayList<StateStamp> statelist = new ArrayList<>();
             double x = random.nextDouble(30, 80);
             double y = random.nextDouble(30, 80);
+            double vv = v;
             double rad = deg / 180.0 * Math.PI;//角度转为弧度
-            for (long t = 0; t <= time; t += 25) {
-                double mat[][] = {{x}, {y}, {v * Math.cos(rad)}, {v * Math.sin(rad)}};
+            double deltaT = 1000.0/fps;
+            for (long t = 0; t <= time; t += deltaT) {
+                double mat[][] = {{x}, {y}, {vv * Math.cos(rad)}, {vv * Math.sin(rad)}, {a * Math.cos(rad)}, {a * Math.sin(rad)}};
                 statelist.add(new StateStamp(t, new Matrix(mat), null));
-                x += (v * Math.cos(rad) / 40.0);
-                y += (v * Math.sin(rad) / 40.0);
+                x += (v * Math.cos(rad) *deltaT)/1000.0+(a*Math.cos(rad)*(2*deltaT*t+deltaT*deltaT))/2000000.0;
+                y += (v * Math.sin(rad) *deltaT)/1000.0+(a*Math.sin(rad)*(2*deltaT*t+deltaT*deltaT))/2000000.0;
+                vv += a*deltaT/1000.0;
             }
             return statelist;
         }

@@ -6,7 +6,11 @@
 package ui;
 
 import simulation.Simulation;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 import org.jfree.chart.ChartPanel;
 import simulation.Circle;
@@ -20,10 +24,14 @@ import utils.MyChart;
 public class SimulationPanel extends javax.swing.JPanel {
 
     private static SimulationPanel instance;
-    private Line line = new Line(0, 30, 5000);
-    private Circle circle = new Circle(20, 30, 5000);
-    private ChartPanel pPanel, vPanel;
-    private boolean showPos = true;
+    private Line line = new Line(0, 30,3, 5000,40);
+    private Circle circle = new Circle(20, 30, 3,5000);
+    private ChartPanel pPanel, vPanel,cPanel,acpPanel,acvPanel;
+    private int showPos = 0;
+    private ArrayList<Double> fpsList;
+    private ArrayList<Double> mediaList;
+    private ArrayList<Double> uppList;
+    private ArrayList<Double> lowList;
 
     public static SimulationPanel getInstance() {
         if (instance == null) {
@@ -67,6 +75,14 @@ public class SimulationPanel extends javax.swing.JPanel {
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        jTextField7 = new javax.swing.JTextField();
+        jTextField8 = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField9 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jButton3 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(300, 300));
@@ -75,7 +91,7 @@ public class SimulationPanel extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 543, Short.MAX_VALUE)
+            .addGap(0, 805, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,109 +123,186 @@ public class SimulationPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel1.setText("Angle(deg)");
 
-        jLabel2.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel2.setText("Velocity(cm/s)");
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel3.setText("Time(ms)");
 
-        jTextField1.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
-        jTextField1.setText("0");
+        jTextField1.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField1.setText("45");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
-        jTextField2.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
-        jTextField2.setText("10");
+        jTextField2.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField2.setText("0");
 
-        jTextField3.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
-        jTextField3.setText("1000");
+        jTextField3.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField3.setText("12000");
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel4.setText("Radius(cm)");
 
-        jLabel5.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel5.setText("Velocity(deg/s)");
 
-        jLabel6.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel6.setText("Time(ms)");
 
-        jTextField4.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jTextField4.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jTextField4.setText("10");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
 
-        jTextField5.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jTextField5.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jTextField5.setText("10");
 
-        jTextField6.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        jTextField6.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jTextField6.setText("1000");
 
         jLabel7.setFont(new java.awt.Font("Calibri", 1, 36)); // NOI18N
         jLabel7.setText("Simulation");
+
+        jTextField7.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField7.setText("4");
+        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField7ActionPerformed(evt);
+            }
+        });
+
+        jTextField8.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField8.setText("5");
+
+        jLabel8.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabel8.setText("Acceleration(cm/s^2)");
+
+        jLabel9.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabel9.setText("Acceleration(deg/s^2)");
+
+        jTextField9.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField9.setText("40");
+        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField9ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabel10.setText("fps");
+
+        jRadioButton3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jRadioButton3.setText("Acceleration Correction");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jButton3.setText("reset arraylist");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(122, 122, 122)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel7)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3)
+                        .addGap(78, 78, 78))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jRadioButton1)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(jLabel1))
+                                        .addGap(29, 29, 29))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jRadioButton2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel4)))
+                                        .addGap(15, 15, 15)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(40, 40, 40)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jRadioButton3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(29, 29, 29)
+                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel9))
+                                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(14, 14, 14)
-                                        .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(466, 466, 466)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel3))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel6)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                                    .addComponent(jTextField6)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(267, 267, 267)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 805, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -221,13 +314,16 @@ public class SimulationPanel extends javax.swing.JPanel {
                             .addComponent(jLabel5)
                             .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(jButton1))
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButton1)
+                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(jRadioButton3)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jRadioButton1)
@@ -235,7 +331,11 @@ public class SimulationPanel extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel8)))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -244,24 +344,56 @@ public class SimulationPanel extends javax.swing.JPanel {
         ArrayList<Double>[][] results;
         try {
             if (jRadioButton1.isSelected()) {
-                line = new Line(Double.valueOf(jTextField1.getText()), Double.valueOf(jTextField2.getText()), Long.valueOf(jTextField3.getText()));
-                results = Simulation.track(line);
+                line = new Line(Double.valueOf(jTextField1.getText()), Double.valueOf(jTextField2.getText()),Double.valueOf(jTextField7.getText()), Long.valueOf(jTextField3.getText()),Double.valueOf(jTextField9.getText()));
+                results = Simulation.track(line,jRadioButton3.isSelected());
             } else {
-                circle = new Circle(Double.valueOf(jTextField4.getText()), Double.valueOf(jTextField5.getText()), Long.valueOf(jTextField6.getText()));
-                results = Simulation.track(circle);
+                circle = new Circle(Double.valueOf(jTextField4.getText()), Double.valueOf(jTextField5.getText()),Double.valueOf(jTextField8.getText()), Long.valueOf(jTextField6.getText()));
+                results = Simulation.track(circle,jRadioButton3.isSelected());
             }
-            String[] legends = {"X", "Y", "Combined"};
-            pPanel = MyChart.cdfPlot("CDF of Position Error", "Position Error (cm)", legends, results[0]);
-            pPanel.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
-            vPanel = MyChart.cdfPlot("CDF of Velocity Error", "Velocity Error (cm/s)", legends, results[1]);
-            vPanel.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+//            AddSrcData(Double.valueOf(jTextField9.getText()),results[1][3]);
+//            System.out.println(results[0][2]);
+//            System.out.println("\n");
+//            File file;
+//            String filename;
+//            if(jRadioButton3.isSelected())
+//                filename = new String("sample2.txt");
+//            else 
+//                filename = new String("sample1.txt");
+//            file = new File(filename);
+//            if(!file.exists())
+//                    file.createNewFile();
+//            FileWriter fw = new FileWriter(filename, false);
+//            PrintWriter pw = new PrintWriter(fw);
+//            pw.println(results[1][3]);
+//            pw.flush();
+//
+//            System.out.println(results[1][3]);
+//            System.out.println("\n");
+            String[] legends = {"X", "Y", "Combined","Percentage Error"};
+            if(jRadioButton3.isSelected()){
+                acpPanel = MyChart.cdfPlot("CDF of Position Error(Optimized)", "Position Error (cm)", legends, results[0]);
+                acpPanel.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+                acvPanel = MyChart.cdfPlot("CDF of Velocity Error(Optimized)", "Velocity Error (cm/s)", legends, results[1]);
+                acvPanel.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+            }
+            else{
+                pPanel = MyChart.cdfPlot("CDF of Position Error", "Position Error (cm)", legends, results[0]);
+                pPanel.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+                vPanel = MyChart.cdfPlot("CDF of Velocity Error", "Velocity Error (cm/s)", legends, results[1]);
+                vPanel.setBounds(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+            }
+            
         } catch (Exception ex) {
             System.err.println(ex);
             JOptionPane.showMessageDialog(null, "Simulation Failure", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         jPanel1.removeAll();
-        if (showPos) {
+        if(jRadioButton3.isSelected()){
+            pPanel = acpPanel;
+            vPanel = acvPanel;
+        }
+        if (showPos==0) {
             jPanel1.add(pPanel);
             this.repaint();
             pPanel.setVisible(true);
@@ -272,11 +404,20 @@ public class SimulationPanel extends javax.swing.JPanel {
         }
         JOptionPane.showMessageDialog(null, "Simulation Success", "Message", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    private void AddSrcData(double fps, ArrayList<Double> results){
+        Collections.sort(results);
+        int n = results.size();
+        fpsList.add(fps);
+        mediaList.add(results.get((n+1)/2)); 
+        uppList.add(results.get(n*9/10)-results.get((n+1)/2)); 
+        lowList.add(results.get((n+1)/2)-results.get(n/10)) ;
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        showPos = !showPos;
+        showPos = (showPos+1)%2;
         jPanel1.removeAll();
-        if (showPos) {
+        if (showPos==0) {
             jPanel1.add(pPanel);
             this.repaint();
             pPanel.setVisible(true);
@@ -287,26 +428,73 @@ public class SimulationPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField7ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField9ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+//        System.out.println(fpsList);
+//        System.out.println("\n");
+//        System.out.println(mediaList);
+//        System.out.println("\n");
+//        System.out.println(uppList);
+//        System.out.println("\n");
+//        System.out.println(lowList);
+//        System.out.println("\n");
+//        fpsList= new ArrayList<>();
+//        mediaList=new ArrayList<>();
+//        uppList=new ArrayList<>();
+//        lowList=new ArrayList<>();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }

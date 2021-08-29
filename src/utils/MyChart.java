@@ -1,5 +1,6 @@
 package utils;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.jfree.chart.ChartFactory;
@@ -57,6 +58,12 @@ public class MyChart {
         ChartPanel chartPanel = new ChartPanel(chart);
         chart.getXYPlot().getDomainAxis().setUpperBound(max);//设置X轴范围
         chart.getXYPlot().getRangeAxis().setUpperBound(1.0);//设置Y轴范围
+        //设置字体
+        chart.getXYPlot().getDomainAxis().setLabelFont(new Font("Helvetica",Font.PLAIN,20));
+        chart.getXYPlot().getDomainAxis().setTickLabelFont(new Font("Helvetica",Font.PLAIN,18));
+        chart.getXYPlot().getRangeAxis().setLabelFont(new Font("Helvetica",Font.PLAIN,20));
+        chart.getXYPlot().getRangeAxis().setTickLabelFont(new Font("Helvetica",Font.PLAIN,18));
+        chart.getLegend().setItemFont(new Font("Helvetica",Font.PLAIN,20));   
         return chartPanel;
     }
 
